@@ -18,7 +18,7 @@ with open(election_csv,'r') as csv_file:
     candidate_total = 0
     candidate_name = ""
 
-#Iterates over each row and calculates the different values requested
+#Iterates over each row to get the total votel cast, and how many each candidate got.
     for row in csv_reader:
         total_votes += 1
         candidate_name = row[2]
@@ -26,46 +26,54 @@ with open(election_csv,'r') as csv_file:
             candidate_results[candidate_name] += 1
         else:
             candidate_results[candidate_name] = 1
+#List to store the first section of the analysis
 
-print("\n Election Results: \n")
-print("--------------------------\n")
-print("Total votes: " + str(total_votes) +"\n")
-print("--------------------------\n")
+header = ["\n Election Results: \n",
+          "--------------------------\n",
+          "Total votes: " + str(total_votes) +"\n",
+          "--------------------------\n"]
 
+#Iterates over the results to check who has the highest vote count and declare them the winner
 winner_votes = 0
+results_summary = []
+
 for candidate_name, votes in candidate_results.items():
-    if votes > winner_votes:
-        winner_votes = votes
-        winner_name = candidate_name
-
-    percentage = votes/total_votes
-    #format(percentage, ".2%")
-    print(f"{candidate_name}: {votes} votes ({percentage:.2%})\n")
-
-print("--------------------------\n")
-print("Winner:" + winner_name +"\n")
-print("--------------------------\n")
-
-with open('ElectionResult.txt', 'w') as txt_file:
-
-    txt_file.write("\nElection Results: \n")
-    txt_file.write("--------------------------\n")
-    txt_file.write("Total votes: " + str(total_votes) +"\n")
-    txt_file.write("--------------------------\n")
-
-    winner_votes = 0
-    for candidate_name, votes in candidate_results.items():
         if votes > winner_votes:
             winner_votes = votes
             winner_name = candidate_name
-
-        percentage = votes/total_votes
+    
+        percentage = round((votes/total_votes) * 100,2)
         
-        txt_file.write(f"{candidate_name}: {votes} votes ({percentage:.2%})\n")
+        #List containing the summary of the results for each candidate
+        results_summary.append(candidate_name +": " + str(votes) + " votes " + str(percentage)+"%" +"\n")
 
-    txt_file.write("--------------------------\n")
-    txt_file.write("Winner: " + winner_name +"\n")
-    txt_file.write("--------------------------\n")
+#List containin the winner section
+winner = ["--------------------------\n",
+          "Winner: " + winner_name +"\n",
+          "--------------------------\n"]
+
+# Prints to screen each section
+for items in header:
+    print(items)
+
+for items in results_summary:
+    print(items)
+    
+for items in winner:
+    print(items)
+
+#Finds path  and creates the text file for the analysis of the results
+analysis_csv = os.path.join('Analysis', 'Election_result.txt')
+
+#opens the file and writes in it each section
+with open(analysis_csv, 'w') as txt_file:
+    for items in header:
+        txt_file.write(items)
+    
+    for items in results_summary:
+        txt_file.write(items)
+        
+    for items in winner:
+        txt_file.write(items)
 
 print("Output saved to ElectionResult.txt")
-    
