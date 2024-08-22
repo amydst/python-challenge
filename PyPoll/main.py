@@ -52,28 +52,18 @@ winner = ["--------------------------\n",
           "Winner: " + winner_name +"\n",
           "--------------------------\n"]
 
-# Prints to screen each section
-for items in header:
-    print(items)
-
-for items in results_summary:
-    print(items)
-    
-for items in winner:
-    print(items)
-
 #Finds path  and creates the text file for the analysis of the results
 analysis_csv = os.path.join('Analysis', 'Election_result.txt')
 
-#opens the file and writes in it each section
+#Opens the file, writes each section and prints it to screen
 with open(analysis_csv, 'w') as txt_file:
     for items in header:
         txt_file.write(items)
-    
+        print(items)
     for items in results_summary:
         txt_file.write(items)
-        
+        print(items)
     for items in winner:
         txt_file.write(items)
-
-print("Output saved to ElectionResult.txt")
+        print(items)
+print("Output saved to \Analysis\Election_result.txt")
